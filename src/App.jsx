@@ -8,6 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 // Styles
 import './App.css';
 import './styles/Pages.css';
+import './styles/theme.css';
 
 // Pages - User
 import Cart from './pages/Cart';
