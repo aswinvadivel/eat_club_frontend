@@ -1,10 +1,12 @@
 import { ChevronLeft, Trash2 } from 'lucide-react';
+import { Sparkles, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useCart } from '../context/CartContext';
 import { orderAPI, restaurantAPI } from '../services/api';
 import { formatPrice, handleApiError } from '../utils/helpers';
+import '../styles/CartOrders.css';
 
 const Cart = () => {
   const { cartItems, cart, updateCartItem, removeFromCart, clearCart } = useCart();
@@ -16,6 +18,10 @@ const Cart = () => {
   const [paymentMethod, setPaymentMethod] = useState('UPI');
   const [error, setError] = useState('');
   const [orderLoading, setOrderLoading] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [tipAmount, setTipAmount] = useState(0);
+  const [couponMessage, setCouponMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -42,7 +48,34 @@ const Cart = () => {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
   const tax = subtotal * 0.05; // 5% tax
   const deliveryCharge = 40;
-  const total = subtotal + tax + deliveryCharge;
+  const totalBeforeDiscount = subtotal + tax + deliveryCharge + tipAmount;
+  const total = Math.max(totalBeforeDiscount - discountAmount, 0);
+
+  const handleApplyCoupon = () => {
+    const normalized = couponCode.trim().toUpperCase();
+
+    if (!normalized) {
+      setCouponMessage('Enter a coupon code');
+      setDiscountAmount(0);
+      return;
+    }
+
+    if (normalized === 'EAT10') {
+      const discount = Math.min(subtotal * 0.1, 100);
+      setDiscountAmount(discount);
+      setCouponMessage('EAT10 applied successfully');
+      return;
+    }
+
+    if (normalized === 'WELCOME50' && subtotal >= 300) {
+      setDiscountAmount(50);
+      setCouponMessage('WELCOME50 applied successfully');
+      return;
+    }
+
+    setDiscountAmount(0);
+    setCouponMessage('Invalid or ineligible coupon');
+  };
 
   const handleQuantityChange = (itemId, newQuantity) => {
     if (newQuantity <= 0) {
@@ -78,7 +111,7 @@ const Cart = () => {
       // Success
       alert('Order placed successfully!');
       clearCart();
-      navigate(`/orders/${response.data.orderId}`);
+      navigate('/orders');
     } catch (err) {
       setError(handleApiError(err));
     } finally {
@@ -92,28 +125,41 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div style={{ minHeight: 'calc(100vh - 80px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="empty-state">
+      <div className="page-shell" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="empty-state cart-empty-state">
           <div className="empty-state-icon">🛒</div>
           <h3 className="empty-state-title">Your cart is empty</h3>
           <p className="empty-state-message">
-            Add some delicious items to your cart
+            Add some delicious items to your cart and unlock exciting offers.
           </p>
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate('/')}
-            style={{ marginTop: '1rem' }}
-          >
-            Continue Browsing
-          </button>
+
+          <div className="cart-empty-actions">
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate('/')}
+            >
+              Continue Browsing
+            </button>
+            <button
+              className="btn btn-outline"
+              onClick={() => navigate('/orders')}
+            >
+              View Past Orders
+            </button>
+          </div>
+
+          <div className="cart-empty-tips">
+            <p><Sparkles size={14} /> Popular picks are refreshed every day.</p>
+            <p><Tag size={14} /> Try coupon <strong>EAT10</strong> for up to Rs.100 off.</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 80px)', backgroundColor: 'var(--light-gray)', paddingTop: '1.5rem', paddingBottom: '2rem' }}>
-      <div className="container" style={{ maxWidth: '900px' }}>
+    <div className="page-shell">
+      <div className="container" style={{ maxWidth: '980px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
           <button
             onClick={() => navigate('/')}
@@ -135,11 +181,11 @@ const Cart = () => {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', '@media (max-width: 768px)': { gridTemplateColumns: '1fr' } }}>
+        <div className="cart-layout">
           {/* Cart Items */}
           <div>
             {restaurant && (
-              <div style={{ backgroundColor: 'white', padding: '1rem', borderRadius: 'var(--border-radius)', marginBottom: '1.5rem', boxShadow: 'var(--shadow)' }}>
+              <div style={{ backgroundColor: 'var(--card-bg)', padding: '1rem', borderRadius: 'var(--border-radius-md)', marginBottom: '1.5rem', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--card-border)' }}>
                 <p style={{ margin: 0, color: 'var(--medium-gray)', fontSize: '0.875rem' }}>
                   FROM
                 </p>
@@ -151,11 +197,12 @@ const Cart = () => {
               <div
                 key={item.cartItemId}
                 style={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'var(--card-bg)',
                   padding: '1rem',
-                  borderRadius: 'var(--border-radius)',
+                  borderRadius: 'var(--border-radius-md)',
                   marginBottom: '1rem',
-                  boxShadow: 'var(--shadow)',
+                  boxShadow: 'var(--shadow-sm)',
+                  border: '1px solid var(--card-border)',
                   display: 'flex',
                   gap: '1rem',
                 }}
@@ -216,6 +263,40 @@ const Cart = () => {
               </div>
             ))}
 
+            <div className="cart-promo-card">
+              <h4><Tag size={16} /> Offers & Promo Codes</h4>
+              <div className="cart-promo-row">
+                <input
+                  type="text"
+                  value={couponCode}
+                  placeholder="Try EAT10 or WELCOME50"
+                  onChange={(e) => setCouponCode(e.target.value)}
+                />
+                <button type="button" className="btn btn-primary" onClick={handleApplyCoupon}>
+                  Apply
+                </button>
+              </div>
+              {couponMessage && (
+                <p className="cart-promo-message">{couponMessage}</p>
+              )}
+            </div>
+
+            <div className="cart-tip-card">
+              <h4>Add a delivery tip</h4>
+              <div className="cart-tip-actions">
+                {[0, 20, 40, 60].map((tip) => (
+                  <button
+                    key={tip}
+                    type="button"
+                    className={`btn ${tipAmount === tip ? 'btn-primary' : 'btn-outline'}`}
+                    onClick={() => setTipAmount(tip)}
+                  >
+                    {tip === 0 ? 'No Tip' : formatPrice(tip)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={() => {
                 if (confirm('Clear entire cart? This action cannot be undone.')) {
@@ -233,7 +314,7 @@ const Cart = () => {
           {/* Checkout */}
           <div>
             {/* Bill Summary */}
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: 'var(--border-radius)', marginBottom: '1.5rem', boxShadow: 'var(--shadow)' }}>
+            <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: 'var(--border-radius-md)', marginBottom: '1.5rem', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--card-border)' }}>
               <h3 style={{ margin: '0 0 1rem 0' }}>Bill Details</h3>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
@@ -251,6 +332,18 @@ const Cart = () => {
                 <span>{formatPrice(deliveryCharge)}</span>
               </div>
 
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <span>Delivery Tip</span>
+                <span>{formatPrice(tipAmount)}</span>
+              </div>
+
+              {discountAmount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', color: 'var(--primary-green)' }}>
+                  <span>Coupon Discount</span>
+                  <span>-{formatPrice(discountAmount)}</span>
+                </div>
+              )}
+
               <hr style={{ margin: '0.75rem 0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '1.125rem' }}>
@@ -260,7 +353,7 @@ const Cart = () => {
             </div>
 
             {/* Checkout Form */}
-            <form onSubmit={handlePlaceOrder} style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: 'var(--border-radius)', boxShadow: 'var(--shadow)' }}>
+            <form onSubmit={handlePlaceOrder} style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: 'var(--border-radius-md)', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--card-border)' }}>
               <h3 style={{ margin: '0 0 1rem 0' }}>
                 {showCheckout ? 'Delivery Details' : 'Review Order'}
               </h3>

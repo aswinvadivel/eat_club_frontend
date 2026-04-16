@@ -16,6 +16,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    setShowUserMenu(false);
+    setShowMobileMenu(false);
     logout();
     navigate('/login');
   };
@@ -85,7 +87,10 @@ const Header = () => {
                     <hr style={{ margin: '0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
                     <Link
                       to="/profile"
-                      onClick={() => setShowUserMenu(false)}
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setShowMobileMenu(false);
+                      }}
                     >
                       <User size={18} /> Profile
                     </Link>
@@ -102,33 +107,27 @@ const Header = () => {
           )}
 
           {/* Mobile Menu Toggle */}
-          {window.innerWidth < 768 && (
-            <button
-              onClick={() => setShowMobileMenu(!showMobileMenu)}
-              style={{
-                backgroundColor: 'transparent',
-                color: 'var(--dark-gray)',
-                padding: 0,
-              }}
-            >
-              {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          )}
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            title={showMobileMenu ? 'Close menu' : 'Open menu'}
+          >
+            {showMobileMenu ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Navigation */}
-      {showMobileMenu && window.innerWidth < 768 && (
-        <nav
-          style={{
-            backgroundColor: 'var(--light-gray)',
-            padding: '1rem',
-            borderTop: '1px solid var(--border-color)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.75rem',
-          }}
-        >
+      {showMobileMenu && (
+        <nav className="mobile-nav" style={{ display: 'block' }}>
+          <div className="mobile-nav-panel" style={{ marginLeft: 'auto' }}>
+            <div className="mobile-nav-header" style={{ padding: '1rem', borderBottom: '1px solid var(--card-border)' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>Menu</strong>
+              <button className="mobile-menu-btn" onClick={() => setShowMobileMenu(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', padding: '1rem' }}>
           {!isAdmin && (
             <>
               <Link to="/" onClick={() => setShowMobileMenu(false)}>
@@ -149,6 +148,8 @@ const Header = () => {
               </Link>
             </>
           )}
+            </div>
+          </div>
         </nav>
       )}
     </header>

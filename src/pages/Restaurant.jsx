@@ -123,7 +123,7 @@ const Restaurant = () => {
             position: 'absolute',
             top: '1rem',
             left: '1rem',
-            backgroundColor: 'white',
+            backgroundColor: 'var(--card-bg)',
             border: 'none',
             borderRadius: '50%',
             width: '40px',
@@ -141,7 +141,7 @@ const Restaurant = () => {
 
       <div className="container" style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
         {/* Restaurant Info */}
-        <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: 'var(--border-radius)', marginBottom: '2rem', boxShadow: 'var(--shadow)' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: 'var(--border-radius-md)', marginBottom: '2rem', boxShadow: 'var(--shadow-md)', border: '1px solid var(--card-border)' }}>
           <h1 style={{ margin: '0 0 0.5rem 0' }}>{restaurant.restaurantName}</h1>
           <p style={{ color: 'var(--medium-gray)', margin: '0 0 1rem 0' }}>
             {restaurant.cuisineType}
@@ -174,7 +174,7 @@ const Restaurant = () => {
         )}
 
         {/* Menu Filters */}
-        <div style={{ backgroundColor: 'white', padding: '1rem', borderRadius: 'var(--border-radius)', marginBottom: '2rem', boxShadow: 'var(--shadow)' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '1rem', borderRadius: 'var(--border-radius-md)', marginBottom: '2rem', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--card-border)' }}>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <input

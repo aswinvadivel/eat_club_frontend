@@ -1,15 +1,8 @@
--- ============================================================
--- EatClub - Database Schema and Setup Script
--- Tech Stack: MySQL 8.0+
--- ============================================================
 
--- Create Database
 CREATE DATABASE IF NOT EXISTS eatclub_db;
 USE eatclub_db;
 
--- ============================================================
--- 1. Users Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS users (
   userId VARCHAR(36) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -28,9 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
   INDEX idx_isActive (isActive)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 2. Restaurants Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS restaurants (
   restaurantId VARCHAR(36) PRIMARY KEY,
   adminId VARCHAR(36) NOT NULL,
@@ -50,9 +41,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
   INDEX idx_cuisineType (cuisineType)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 3. Menu Items Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS menu_items (
   itemId VARCHAR(36) PRIMARY KEY,
   restaurantId VARCHAR(36) NOT NULL,
@@ -74,9 +63,7 @@ CREATE TABLE IF NOT EXISTS menu_items (
   INDEX idx_isVegetarian (isVegetarian)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 4. Cart Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS carts (
   cartId VARCHAR(36) PRIMARY KEY,
   userId VARCHAR(36) UNIQUE NOT NULL,
@@ -88,9 +75,7 @@ CREATE TABLE IF NOT EXISTS carts (
   INDEX idx_userId (userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 5. Cart Items Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS cart_items (
   cartItemId VARCHAR(36) PRIMARY KEY,
   cartId VARCHAR(36) NOT NULL,
@@ -105,9 +90,6 @@ CREATE TABLE IF NOT EXISTS cart_items (
   UNIQUE KEY unique_cart_item (cartId, itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 6. Orders Table
--- ============================================================
 CREATE TABLE IF NOT EXISTS orders (
   orderId VARCHAR(36) PRIMARY KEY,
   userId VARCHAR(36) NOT NULL,
@@ -138,9 +120,7 @@ CREATE TABLE IF NOT EXISTS orders (
   INDEX idx_orderId (orderId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- 7. Order Items Table
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS order_items (
   orderItemId VARCHAR(36) PRIMARY KEY,
   orderId VARCHAR(36) NOT NULL,
@@ -157,17 +137,6 @@ CREATE TABLE IF NOT EXISTS order_items (
   INDEX idx_itemId (itemId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- MOCK DATA FOR TESTING
--- ============================================================
-
--- Epoch millisecond timestamps for: 2024-04-16 10:00:00 UTC = 1713265200000
--- Using incremental timestamps for test data
-
--- ============================================================
--- Insert Test Users (2 users, 2 admins)
--- Passwords are hashed (for demo, use actual bcrypt hashes in production)
--- ============================================================
 
 INSERT INTO users (userId, name, email, password, role, phoneNumber, address, isActive, createdAt, updatedAt) VALUES
 ('user-001', 'Rajesh Kumar', 'rajesh.kumar@example.com', '$2a$10$xTgLkJoU8bYbAXVYz5Kp2e2l1m1n1o1p1q1r1s1t1u1v1w1x1y1z2', 'USER', '+91-9876543210', '123 Main Street, Chennai, Tamil Nadu 600001', TRUE, 1712200800000, 1712200800000),
@@ -175,17 +144,12 @@ INSERT INTO users (userId, name, email, password, role, phoneNumber, address, is
 ('admin-001', 'Arjun Verma', 'arjun.verma@restaurant.com', '$2a$10$xTgLkJoU8bYbAXVYz5Kp2e2l1m1n1o1p1q1r1s1t1u1v1w1x1y1z2', 'ADMIN', '+91-7654321098', '789 Restaurant Row, Chennai, Tamil Nadu 600002', TRUE, 1712373600000, 1712373600000),
 ('admin-002', 'Neha Gupta', 'neha.gupta@restaurant.com', '$2a$10$xTgLkJoU8bYbAXVYz5Kp2e2l1m1n1o1p1q1r1s1t1u1v1w1x1y1z2', 'ADMIN', '+91-6543210987', '321 Food Court, Bangalore, Karnataka 560002', TRUE, 1712460000000, 1712460000000);
 
--- ============================================================
--- Insert Restaurants
--- ============================================================
 
 INSERT INTO restaurants (restaurantId, adminId, restaurantName, description, address, phoneNumber, cuisineType, isActive, createdAt, updatedAt) VALUES
 ('rest-001', 'admin-001', 'Tasty Bites', 'Authentic North Indian cuisine with traditional recipes', '789 Restaurant Row, Chennai, Tamil Nadu 600002', '+91-4434556677', 'North Indian', TRUE, 1712546400000, 1712546400000),
 ('rest-002', 'admin-002', 'Spice Garden', 'South Indian specialties and traditional dosas', '321 Food Court, Bangalore, Karnataka 560002', '+91-8022334455', 'South Indian', TRUE, 1712632800000, 1712632800000);
 
--- ============================================================
--- Insert Menu Items for Restaurant 1 (Tasty Bites)
--- ============================================================
+
 
 INSERT INTO menu_items (itemId, restaurantId, itemName, description, price, category, isVegetarian, isSpicy, preparationTime, isAvailable, createdAt, updatedAt) VALUES
 ('item-001', 'rest-001', 'Butter Chicken', 'Creamy butter chicken with aromatic spices', 299.99, 'Main Course', FALSE, TRUE, 20, TRUE, 1712719200000, 1712719200000),
@@ -197,9 +161,7 @@ INSERT INTO menu_items (itemId, restaurantId, itemName, description, price, cate
 ('item-007', 'rest-001', 'Gulab Jamun', 'Sweet milk solids in sugar syrup', 99.99, 'Dessert', TRUE, FALSE, 5, TRUE, 1713237600000, 1713237600000),
 ('item-008', 'rest-001', 'Mango Lassi', 'Yogurt-based mango drink', 79.99, 'Beverage', TRUE, FALSE, 3, TRUE, 1713324000000, 1713324000000);
 
--- ============================================================
--- Insert Menu Items for Restaurant 2 (Spice Garden)
--- ============================================================
+
 
 INSERT INTO menu_items (itemId, restaurantId, itemName, description, price, category, isVegetarian, isSpicy, preparationTime, isAvailable, createdAt, updatedAt) VALUES
 ('item-009', 'rest-002', 'Masala Dosa', 'Crispy crepe with spiced potato filling', 159.99, 'Main Course', TRUE, TRUE, 15, TRUE, 1713410400000, 1713410400000),
@@ -209,17 +171,13 @@ INSERT INTO menu_items (itemId, restaurantId, itemName, description, price, cate
 ('item-013', 'rest-002', 'Chikhalwali', 'Traditional South Indian sweet', 129.99, 'Dessert', TRUE, FALSE, 10, TRUE, 1713756000000, 1713756000000),
 ('item-014', 'rest-002', 'Filter Coffee', 'South Indian filter coffee', 59.99, 'Beverage', TRUE, FALSE, 5, TRUE, 1713842400000, 1713842400000);
 
--- ============================================================
--- Insert Test Carts (empty carts for users)
--- ============================================================
+
 
 INSERT INTO carts (cartId, userId, restaurantId, createdAt, updatedAt) VALUES
 ('cart-001', 'user-001', NULL, 1713928800000, 1713928800000),
 ('cart-002', 'user-002', NULL, 1714015200000, 1714015200000);
 
--- ============================================================
--- Insert Test Orders (for order history)
--- ============================================================
+
 
 INSERT INTO orders (orderId, userId, restaurantId, deliveryAddress, phoneNumber, subtotal, tax, deliveryCharges, total, orderStatus, paymentStatus, paymentMethod, specialInstructions, createdAt, updatedAt) VALUES
 ('ORD-20240410-001', 'user-001', 'rest-001', '123 Main Street, Chennai, Tamil Nadu 600001', '+91-9876543210', 599.98, 107.99, 50.00, 757.97, 'DELIVERED', 'COMPLETED', 'CREDIT_CARD', 'Extra spicy', 1712721000000, 1712722500000),
@@ -227,9 +185,7 @@ INSERT INTO orders (orderId, userId, restaurantId, deliveryAddress, phoneNumber,
 ('ORD-20240414-003', 'user-001', 'rest-002', '123 Main Street, Chennai, Tamil Nadu 600001', '+91-9876543210', 459.98, 82.79, 50.00, 592.77, 'OUT_FOR_DELIVERY', 'COMPLETED', 'CREDIT_CARD', NULL, 1713066600000, 1713068100000),
 ('ORD-20240416-004', 'user-002', 'rest-001', '456 Park Avenue, Bangalore, Karnataka 560001', '+91-8765432109', 749.98, 134.99, 50.00, 934.97, 'CONFIRMED', 'PENDING', 'WALLET', 'Ring bell twice', 1713239400000, 1713239400000);
 
--- ============================================================
--- Insert Order Items (matching the orders)
--- ============================================================
+
 
 INSERT INTO order_items (orderItemId, orderId, itemId, itemName, quantity, unitPrice, totalPrice, specialInstructions, createdAt) VALUES
 ('oitem-001', 'ORD-20240410-001', 'item-001', 'Butter Chicken', 2, 299.99, 599.98, 'Extra spicy', 1712721000000),
@@ -240,11 +196,9 @@ INSERT INTO order_items (orderItemId, orderId, itemId, itemName, quantity, unitP
 ('oitem-006', 'ORD-20240416-004', 'item-002', 'Tandoori Chicken', 2, 349.99, 699.98, NULL, 1713239400000),
 ('oitem-007', 'ORD-20240416-004', 'item-005', 'Garlic Naan', 1, 59.99, 59.99, 'Ring bell twice', 1713239400000);
 
--- ============================================================
--- INDEXES AND STATISTICS (For Performance)
--- ============================================================
 
--- Analyze tables to update statistics
+
+
 ANALYZE TABLE users;
 ANALYZE TABLE restaurants;
 ANALYZE TABLE menu_items;

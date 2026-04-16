@@ -79,7 +79,7 @@ const Profile = () => {
         )}
 
         {/* Profile Header */}
-        <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: 'var(--border-radius)', textAlign: 'center', marginBottom: '2rem', boxShadow: 'var(--shadow)' }}>
+        <div style={{ backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: 'var(--border-radius-md)', textAlign: 'center', marginBottom: '2rem', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--card-border)' }}>
           <div
             style={{
               width: '100px',
@@ -107,7 +107,7 @@ const Profile = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            backgroundColor: 'white',
+            backgroundColor: 'var(--card-bg)',
             padding: '2rem',
             borderRadius: 'var(--border-radius)',
             boxShadow: 'var(--shadow)',

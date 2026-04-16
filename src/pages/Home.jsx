@@ -66,20 +66,20 @@ const Home = () => {
   }
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 80px)', backgroundColor: 'var(--light-gray)', paddingTop: '2rem', paddingBottom: '2rem' }}>
+    <div className="page-shell home-page">
       <div className="container">
         {/* Hero Section */}
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <h1 style={{ color: 'var(--primary-green)', marginBottom: '0.5rem' }}>
+        <div className="home-hero">
+          <h1 className="home-title">
             Order Food Online
           </h1>
-          <p style={{ fontSize: '1.125rem', color: 'var(--medium-gray)' }}>
+          <p className="home-subtitle">
             Browse through your favorite restaurants and discover new cuisines
           </p>
         </div>
 
         {error && (
-          <div className="alert alert-error" style={{ marginBottom: '1.5rem' }}>
+          <div className="alert alert-error home-alert">
             {error}
           </div>
         )}
@@ -94,10 +94,10 @@ const Home = () => {
         {/* Results */}
         {filteredRestaurants.length > 0 ? (
           <>
-            <p style={{ marginBottom: '1.5rem', color: 'var(--medium-gray)' }}>
+            <p className="home-results-count">
               Found <strong>{filteredRestaurants.length}</strong> restaurants
             </p>
-            <div className="grid grid-2" style={{ marginBottom: '2rem' }}>
+            <div className="grid grid-2 home-grid">
               {filteredRestaurants.map((restaurant) => (
                 <RestaurantCard key={restaurant.restaurantId} restaurant={restaurant} />
               ))}

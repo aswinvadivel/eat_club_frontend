@@ -19,6 +19,7 @@ main {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: var(--bg-secondary);
 }
 
 .app-layout header {
@@ -27,9 +28,48 @@ main {
 
 .app-layout main {
   flex: 1;
-  background-color: var(--bg-primary);
+  background-color: transparent;
   overflow-y: auto;
   transition: background-color var(--transition), color var(--transition);
+}
+
+.home-page {
+  padding-top: var(--spacing-xl);
+}
+
+.home-hero {
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary-green) 12%, var(--card-bg)), var(--card-bg));
+  box-shadow: var(--shadow-sm);
+}
+
+.home-title {
+  margin-bottom: 0.4rem;
+  color: var(--text-primary);
+  font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+}
+
+.home-subtitle {
+  color: var(--text-secondary);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.home-alert {
+  margin-bottom: var(--spacing-lg);
+}
+
+.home-results-count {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+.home-grid {
+  margin-bottom: var(--spacing-2xl);
 }
 
 /* Centered Content Wrapper */
