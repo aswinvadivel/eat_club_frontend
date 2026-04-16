@@ -144,3 +144,8 @@ export const handleApiError = (error) => {
   }
   return error.response?.data?.message || error.message || 'Something went wrong';
 };
+
+export const normalizeRole = (role) => {
+  if (!role) return '';
+  return String(role).replace(/^ROLE_/i, '').toUpperCase();
+};

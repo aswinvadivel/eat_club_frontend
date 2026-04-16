@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { authAPI } from '../services/api';
+import { normalizeRole } from '../utils/helpers';
 
 export const AuthContext = createContext();
 
@@ -13,7 +14,11 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        setUser({
+          ...parsedUser,
+          role: normalizeRole(parsedUser?.role),
+        });
       } catch (err) {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
@@ -27,12 +32,16 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       const response = await authAPI.signup(credentials);
       const { token, ...userData } = response.data;
+      const normalizedUserData = {
+        ...userData,
+        role: normalizeRole(userData?.role),
+      };
       
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(normalizedUserData));
+      setUser(normalizedUserData);
       
-      return userData;
+      return normalizedUserData;
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Signup failed';
       setError(errorMsg);
@@ -45,12 +54,16 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       const response = await authAPI.login(credentials);
       const { token, ...userData } = response.data;
+      const normalizedUserData = {
+        ...userData,
+        role: normalizeRole(userData?.role),
+      };
       
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(normalizedUserData));
+      setUser(normalizedUserData);
       
-      return userData;
+      return normalizedUserData;
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Login failed';
       setError(errorMsg);
@@ -72,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN',
+    isAdmin: normalizeRole(user?.role) === 'ADMIN',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

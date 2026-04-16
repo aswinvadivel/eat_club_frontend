@@ -2,7 +2,7 @@ import { Lock, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { handleApiError } from '../utils/helpers';
+import { handleApiError, normalizeRole } from '../utils/helpers';
 import { validateLoginForm } from '../utils/validators';
 import '../styles/Login.css';
 
@@ -42,21 +42,19 @@ const Login = () => {
     setLoading(true);
 
     try {
+      let userData;
       if (isSignup) {
-        await signup({ name, email, password, role: 'USER' });
+        userData = await signup({ name, email, password, role: 'USER' });
       } else {
-        await login({ email, password });
+        userData = await login({ email, password });
       }
 
       // Redirect based on role
-      setTimeout(() => {
-        const userData = JSON.parse(localStorage.getItem('user'));
-        if (userData?.role === 'ADMIN') {
-          navigate('/admin-console');
-        } else {
-          navigate('/');
-        }
-      }, 100);
+      if (normalizeRole(userData?.role) === 'ADMIN') {
+        navigate('/admin-console');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setApiError(handleApiError(err));
     } finally {

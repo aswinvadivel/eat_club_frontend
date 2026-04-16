@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { normalizeRole } from '../utils/helpers';
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -17,11 +18,11 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   }
 
   // Check role if requiredRole is specified
-  if (requiredRole && user?.role !== requiredRole) {
+  if (requiredRole && normalizeRole(user?.role) !== normalizeRole(requiredRole)) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return children || <Outlet />;
 };
 
 export default ProtectedRoute;

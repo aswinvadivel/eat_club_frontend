@@ -35,7 +35,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
 
               {/* Protected User Routes */}
-              <Route element={<ProtectedRoute requiredRole="USER" />}>
+              {/* <Route element={<ProtectedRoute requiredRole="USER" />}> */}
                 <Route element={<><Header /><Outlet /></>}>
                   <Route path="/" element={<Home />} />
                   <Route path="/restaurant/:restaurantId" element={<Restaurant />} />
@@ -43,16 +43,16 @@ const App = () => {
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/profile" element={<Profile />} />
                 </Route>
-              </Route>
+              {/* </Route> */}
 
               {/* Protected Admin Routes */}
-              <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
+              {/* <Route element={<ProtectedRoute requiredRole="ADMIN" />}> */}
                 <Route element={<><Header /><Outlet /></>}>
                   <Route path="/admin-console" element={<AdminConsole />} />
                   <Route path="/admin-console/restaurants" element={<AdminRestaurants />} />
                   <Route path="/admin-console/menu/:restaurantId" element={<AdminMenu />} />
                 </Route>
-              </Route>
+              {/* </Route> */}
 
               {/* Default redirect */}
               <Route path="*" element={<Navigate to="/" replace />} />
