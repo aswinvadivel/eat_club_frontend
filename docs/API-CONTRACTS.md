@@ -364,39 +364,47 @@ Authorization: Bearer <token>
 
 ## 5. Cart Endpoints
 
-### 5.1 Add Item to Cart
-**Endpoint:** `POST /cart/items`
+**Cart Lifecycle Flow:**
+1. POST /cart → Create/initialize cart for user
+2. GET /cart → Retrieve cart with items
+3. POST /cart/items → Add item to cart
+4. PUT /cart/items/{cartItemId} → Update item quantity/instructions
+5. DELETE /cart/items/{cartItemId} → Remove specific item
+6. DELETE /cart → Clear all items
+7. POST /orders → Checkout (creates order from cart items)
+
+### 5.1 Initialize User Cart
+**Endpoint:** `POST /cart`
+
+**Description:** Creates a new cart for the user. Automatically called before adding items. Idempotent - returns existing cart if already created.
 
 **Headers:** Authorization required
 
-**Request Body:**
+**Request Body:** (empty)
 ```json
-{
-  "itemId": "item-001",
-  "restaurantId": "rest-001",
-  "quantity": 2,
-  "specialInstructions": "Extra spicy"
-}
+{}
 ```
 
-**Response (201 Created):**
+**Response (201 Created or 200 OK):**
 ```json
 {
-  "cartItemId": "cart-item-001",
-  "itemId": "item-001",
-  "itemName": "Butter Chicken",
-  "restaurantId": "rest-001",
-  "quantity": 2,
-  "unitPrice": 299.99,
-  "totalPrice": 599.98,
-  "specialInstructions": "Extra spicy",
-  "addedAt": 1712200800000
+  "cartId": "cart-123",
+  "userId": "123e4567-e89b-12d3-a456-426614174000",
+  "restaurantId": null,
+  "cartItems": [],
+  "subtotal": 0,
+  "tax": 0,
+  "deliveryCharges": 0,
+  "total": 0,
+  "lastUpdated": 1712200800000
 }
 ```
 
 ---
 
 ### 5.2 Get Cart
+**Description:** Retrieves the current user's cart with all items and totals.
+
 **Endpoint:** `GET /cart`
 
 **Headers:** Authorization required
@@ -428,7 +436,43 @@ Authorization: Bearer <token>
 
 ---
 
-### 5.3 Update Cart Item
+### 5.3 Add Item to Cart
+**Description:** Adds an item to the user's cart. If cart doesn't exist, it will be created automatically.
+
+**Endpoint:** `POST /cart/items`
+
+**Headers:** Authorization required
+
+**Request Body:**
+```json
+{
+  "itemId": "item-001",
+  "restaurantId": "rest-001",
+  "quantity": 2,
+  "specialInstructions": "Extra spicy"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "cartItemId": "cart-item-001",
+  "itemId": "item-001",
+  "itemName": "Butter Chicken",
+  "restaurantId": "rest-001",
+  "quantity": 2,
+  "unitPrice": 299.99,
+  "totalPrice": 599.98,
+  "specialInstructions": "Extra spicy",
+  "addedAt": 1712200800000
+}
+```
+
+---
+
+### 5.4 Update Cart Item
+**Description:** Updates quantity or special instructions for an item already in the cart.
+
 **Endpoint:** `PUT /cart/items/{cartItemId}`
 
 **Headers:** Authorization required
@@ -441,11 +485,27 @@ Authorization: Bearer <token>
 }
 ```
 
-**Response (200 OK):** Returns updated cart item
+**Response (200 OK):**
+```json
+{
+  "cartItemId": "cart-item-001",
+  "itemId": "item-001",
+  "itemName": "Butter Chicken",
+  "quantity": 3,
+  "unitPrice": 299.99,
+  "totalPrice": 899.97,
+  "specialInstructions": "Extra spicy, light oil",
+  "addedAt": 1712200800000
+}
+```
 
 ---
 
-### 5.4 Remove Item from Cart
+### 5.5 Remove Item from Cart
+**Description:** Removes a single item from the cart. Other items remain.
+
+Note: To remove all items, use DELETE /cart instead.
+
 **Endpoint:** `DELETE /cart/items/{cartItemId}`
 
 **Headers:** Authorization required
@@ -454,7 +514,9 @@ Authorization: Bearer <token>
 
 ---
 
-### 5.5 Clear Cart
+### 5.6 Clear Entire Cart
+**Description:** Removes all items from the cart (empties it completely). Cart itself remains, only items are deleted.
+
 **Endpoint:** `DELETE /cart`
 
 **Headers:** Authorization required
@@ -465,7 +527,19 @@ Authorization: Bearer <token>
 
 ## 6. Order Endpoints
 
-### 6.1 Create Order
+**Order Creation Flow:**
+1. User adds items to cart (POST /cart/items)
+2. User reviews cart (GET /cart)
+3. User creates order from cart (POST /orders)
+   - This automatically creates order_items from cart_items
+   - Cart is cleared after successful order creation
+4. Order can be tracked/modified via order endpoints
+
+### 6.1 Create Order from Cart
+**Description:** Creates a new order from items currently in the user's cart. Automatically creates order_items from cart_items, then clears the cart.
+
+**Important:** Items must exist in cart before calling this endpoint.
+
 **Endpoint:** `POST /orders`
 
 **Headers:** Authorization required
