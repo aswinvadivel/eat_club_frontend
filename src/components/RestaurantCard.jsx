@@ -1,12 +1,13 @@
 import { Clock, MapPin, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { truncateText } from '../utils/helpers';
+import '../styles/RestaurantCard.css';
 
 const RestaurantCard = ({ restaurant }) => {
   const defaultImage = 'https://via.placeholder.com/400x200?text=' + encodeURIComponent(restaurant.restaurantName);
   
   return (
-    <Link to={`/restaurant/${restaurant.restaurantId}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/restaurant/${restaurant.restaurantId}`} className="restaurant-link">
       <div className="restaurant-card">
         <div className="restaurant-image">
           <img 
@@ -30,21 +31,21 @@ const RestaurantCard = ({ restaurant }) => {
           </div>
           
           <p className="restaurant-cuisine">{restaurant.cuisineType}</p>
-          <p style={{ fontSize: '0.875rem', color: 'var(--medium-gray)', marginBottom: '0.75rem' }}>
+          <p className="restaurant-summary">
             {truncateText(restaurant.description, 60)}
           </p>
           
           <div className="restaurant-meta">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <div>
               <Clock size={16} />
               <span>30 mins</span>
             </div>
             {restaurant.totalOrders && (
-              <div style={{ color: 'var(--medium-gray)' }}>
+              <div>
                 {restaurant.totalOrders} orders
               </div>
             )}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <div>
               <MapPin size={16} />
               <span>Nearby</span>
             </div>

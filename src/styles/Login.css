@@ -1,0 +1,402 @@
+/* ============================
+   Login Page Styles
+   ============================ */
+
+.login-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  transition: background var(--transition);
+}
+
+/* Form Container */
+.form-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem;
+  max-width: 450px;
+  width: 100%;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition);
+}
+
+.form-container:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Form Title */
+.form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  transition: color var(--transition);
+}
+
+/* Form Subtitle */
+.form-subtitle {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  font-weight: 600;
+  transition: color var(--transition);
+}
+
+/* Form Group - Card Style Inputs */
+.form-group {
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color var(--transition);
+}
+
+/* Card-Style Input Wrapper */
+.form-group-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+  padding: 0 var(--spacing-md);
+}
+
+.form-group-input-wrapper:focus-within {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(29, 184, 84, 0.1),
+              inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  background-color: var(--input-bg);
+}
+
+[data-theme="dark"] .form-group-input-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(29, 184, 84, 0.2),
+              inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Input Icon */
+.form-group-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  margin-right: var(--spacing-md);
+  transition: color var(--transition-fast);
+}
+
+.form-group-input-wrapper:focus-within .form-group-icon {
+  color: var(--primary-green);
+}
+
+/* Card-Style Input Field */
+.form-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-md) 0;
+  font-family: var(--font-family);
+  outline: none;
+  transition: color var(--transition);
+}
+
+.form-group input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Error Message */
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--error, #D32F2F);
+  margin-top: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  animation: slideDown 0.3s ease-out;
+  transition: color var(--transition);
+}
+
+.error-message::before {
+  content: '⚠';
+  font-size: 0.875rem;
+  display: inline-block;
+}
+
+/* Alert Messages */
+.alert {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  animation: slideDown 0.3s ease-out;
+  transition: all var(--transition);
+}
+
+.alert-error {
+  background-color: rgba(211, 47, 47, 0.1);
+  border: 1px solid rgba(211, 47, 47, 0.3);
+  color: var(--error, #D32F2F);
+}
+
+.alert-success {
+  background-color: rgba(29, 184, 84, 0.1);
+  border: 1px solid rgba(29, 184, 84, 0.3);
+  color: var(--success, #1DB854);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Submit Button */
+.form-submit-btn {
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+  background-color: var(--primary-green);
+  color: var(--white);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.form-submit-btn:hover:not(:disabled) {
+  background-color: var(--dark-green);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.form-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+.form-submit-btn:disabled {
+  background-color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Form Footer - Tab Switcher */
+.form-footer {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition);
+}
+
+.form-footer button {
+  background: none;
+  border: none;
+  color: var(--primary-green);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.form-footer button:hover {
+  text-decoration: underline;
+  color: var(--dark-green);
+}
+
+/* Demo Credentials Card */
+.demo-credentials {
+  margin-top: var(--spacing-2xl);
+  padding: var(--spacing-lg);
+  background-color: rgba(29, 184, 84, 0.08);
+  border: 1px solid var(--primary-green);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition);
+}
+
+.demo-credentials:hover {
+  background-color: rgba(29, 184, 84, 0.12);
+  box-shadow: 0 2px 8px rgba(29, 184, 84, 0.1);
+}
+
+.demo-credentials-title {
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--spacing-md) 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color var(--transition);
+}
+
+.demo-credentials-item {
+  font-size: var(--font-size-xs);
+  margin: var(--spacing-sm) 0;
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+  transition: color var(--transition);
+  line-height: 1.6;
+}
+
+.demo-credentials-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Loading State */
+.btn-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ============================
+   Responsive Design
+   ============================ */
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 2rem;
+    margin: auto;
+    max-width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+  }
+
+  .form-group label {
+    font-size: var(--font-size-xs);
+  }
+
+  .form-group input {
+    padding: var(--spacing-md) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: var(--spacing-md);
+  }
+
+  .form-container {
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+  }
+
+  .form-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .form-subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-submit-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+
+  .demo-credentials {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+  }
+}
+
+/* ============================
+   Dark Mode Specific Styles
+   ============================ */
+
+[data-theme="dark"] .form-group-input-wrapper {
+  background-color: var(--input-bg);
+}
+
+[data-theme="dark"] .alert-error {
+  background-color: rgba(211, 47, 47, 0.15);
+}
+
+[data-theme="dark"] .alert-success {
+  background-color: rgba(29, 184, 84, 0.15);
+}
+
+[data-theme="dark"] .demo-credentials {
+  background-color: rgba(29, 184, 84, 0.1);
+}
+
+[data-theme="dark"] .demo-credentials:hover {
+  background-color: rgba(29, 184, 84, 0.15);
+}
+
+/* ============================
+   Animations
+   ============================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Focus Ring Animation */
+@keyframes focusRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(29, 184, 84, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(29, 184, 84, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(29, 184, 84, 0);
+  }
+}

@@ -1,13 +1,16 @@
-import { LogOut, Menu, ShoppingCart, User, X } from 'lucide-react';
+import { LogOut, Menu, Moon, ShoppingCart, Sun, User, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 import { getInitials } from '../utils/helpers';
+import '../styles/Header.css';
 
 const Header = () => {
   const { user, logout, isAdmin } = useAuth();
   const { cartItemsCount } = useCart();
+  const { isDark, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="header-nav" style={{ display: window.innerWidth < 768 ? 'none' : 'flex' }}>
+        <nav className="header-nav">
           {!isAdmin && (
             <>
               <Link to="/">Browse</Link>
@@ -42,6 +45,15 @@ const Header = () => {
 
         {/* Header Actions */}
         <div className="header-actions">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle"
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDark ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+
           {user && (
             <>
               {!isAdmin && (
@@ -51,7 +63,7 @@ const Header = () => {
                 </Link>
               )}
 
-              <div className="user-menu" style={{ position: 'relative' }}>
+              <div className="user-menu">
                 <div
                   className="user-avatar"
                   onClick={() => setShowUserMenu(!showUserMenu)}
@@ -61,58 +73,25 @@ const Header = () => {
                 </div>
 
                 {showUserMenu && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      right: 0,
-                      marginTop: '0.5rem',
-                      backgroundColor: 'var(--white)',
-                      borderRadius: 'var(--border-radius)',
-                      boxShadow: 'var(--shadow-lg)',
-                      border: '1px solid var(--border-color)',
-                      minWidth: '200px',
-                      zIndex: 1000,
-                    }}
-                  >
-                    <div style={{ padding: '0.75rem' }}>
-                      <p style={{ margin: 0, fontWeight: 600, marginBottom: '0.5rem' }}>
+                  <div className="user-dropdown">
+                    <div style={{ padding: 'var(--spacing-lg)' }}>
+                      <p style={{ margin: 0, fontWeight: 600, marginBottom: 'var(--spacing-sm)' }}>
                         {user.name}
                       </p>
-                      <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--medium-gray)' }}>
+                      <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--medium-gray)' }}>
                         {user.email}
                       </p>
                     </div>
-                    <hr style={{ margin: '0.5rem 0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
+                    <hr style={{ margin: '0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
                     <Link
                       to="/profile"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.75rem',
-                        color: 'var(--dark-gray)',
-                        textDecoration: 'none',
-                      }}
                       onClick={() => setShowUserMenu(false)}
                     >
                       <User size={18} /> Profile
                     </Link>
                     <button
                       onClick={handleLogout}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.75rem',
-                        backgroundColor: 'transparent',
-                        color: 'var(--error)',
-                        border: 'none',
-                        borderRadius: 0,
-                        justifyContent: 'flex-start',
-                        cursor: 'pointer',
-                      }}
+                      className="logout-btn"
                     >
                       <LogOut size={18} /> Logout
                     </button>

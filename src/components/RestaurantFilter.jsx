@@ -1,6 +1,7 @@
 import { Filter, Search } from 'lucide-react';
 import { useState } from 'react';
 import { CUISINE_TYPES, SORT_OPTIONS } from '../utils/constants';
+import '../styles/RestaurantFilter.css';
 
 const RestaurantFilter = ({ onFilterChange, onSearchChange, onSortChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,34 +36,21 @@ const RestaurantFilter = ({ onFilterChange, onSearchChange, onSortChange }) => {
   return (
     <div className="filter-panel">
       {/* Search Bar */}
-      <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ position: 'relative' }}>
-          <Search 
-            size={20} 
-            style={{
-              position: 'absolute',
-              left: '0.75rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: 'var(--medium-gray)',
-              pointerEvents: 'none',
-            }}
-          />
+      <div className="form-group">
+        <div className="search-bar">
+          <Search size={20} />
           <input
             type="text"
             placeholder="Search restaurants..."
             value={searchQuery}
             onChange={handleSearchChange}
-            style={{
-              paddingLeft: '2.5rem',
-            }}
           />
         </div>
       </div>
 
       {/* Sort */}
-      <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-        <label className="filter-label">Sort By</label>
+      <div className="form-group">
+        <label>Sort By</label>
         <select value={sortBy} onChange={handleSortChange}>
           {SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -74,14 +62,7 @@ const RestaurantFilter = ({ onFilterChange, onSearchChange, onSortChange }) => {
 
       {/* Filters Toggle (Mobile) */}
       <button
-        className="btn btn-secondary"
-        style={{
-          display: window.innerWidth < 768 ? 'flex' : 'none',
-          width: '100%',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          marginBottom: '1rem',
-        }}
+        className="filter-toggle-btn"
         onClick={() => setShowFilters(!showFilters)}
       >
         <Filter size={20} />
@@ -89,44 +70,33 @@ const RestaurantFilter = ({ onFilterChange, onSearchChange, onSortChange }) => {
       </button>
 
       {/* Filters Section */}
-      <div
-        style={{
-          display: window.innerWidth < 768 ? (showFilters ? 'block' : 'none') : 'block',
-        }}
-      >
+      <div className={`filters-content ${showFilters ? 'show' : ''}`}>
         {/* Cuisine Types */}
-        <div className="filter-section" style={{ marginBottom: '1.5rem' }}>
-          <label className="filter-label">Cuisine Types</label>
-          <div className="filter-options">
+        <div className="form-group">
+          <label>Cuisine Types</label>
+          <div className="filter-buttons">
             {CUISINE_TYPES.map((cuisine) => (
-              <label key={cuisine} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                <input
-                  type="radio"
-                  name="cuisine"
-                  value={cuisine}
-                  checked={selectedCuisine === cuisine}
-                  onChange={() => handleCuisineChange(cuisine)}
-                  style={{ marginRight: '0.5rem' }}
-                />
-                <span>{cuisine}</span>
-              </label>
+              <button
+                key={cuisine}
+                className={`filter-button ${selectedCuisine === cuisine ? 'active' : ''}`}
+                onClick={() => handleCuisineChange(cuisine)}
+              >
+                {cuisine}
+              </button>
             ))}
           </div>
         </div>
 
         {/* Dietary Preferences */}
-        <div className="filter-section">
-          <label className="filter-label">Dietary Preferences</label>
-          <div className="filter-options">
-            <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={isVegetarian}
-                onChange={handleVegetarianChange}
-                style={{ marginRight: '0.5rem' }}
-              />
-              <span>Pure Vegetarian</span>
-            </label>
+        <div className="form-group">
+          <div className="vegetarian-filter">
+            <input
+              type="checkbox"
+              id="veg-filter"
+              checked={isVegetarian}
+              onChange={handleVegetarianChange}
+            />
+            <label htmlFor="veg-filter">Pure Vegetarian</label>
           </div>
         </div>
       </div>

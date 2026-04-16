@@ -3,6 +3,11 @@ import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
+
+// Styles
+import './App.css';
+import './styles/Pages.css';
 
 // Pages - User
 import Cart from './pages/Cart';
@@ -20,12 +25,13 @@ import AdminRestaurants from './pages/admin/AdminRestaurants';
 const App = () => {
   return (
     <Router>
-      <AuthProvider>
-        <CartProvider>
-          <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<Login />} />
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            <div className="app-layout">
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login" element={<Login />} />
 
               {/* Protected User Routes */}
               <Route element={<ProtectedRoute requiredRole="USER" />}>
@@ -52,7 +58,8 @@ const App = () => {
             </Routes>
           </div>
         </CartProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 };

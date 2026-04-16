@@ -1,0 +1,314 @@
+/* Restaurant Card Component Styles */
+
+/* Link wrapper */
+.restaurant-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.restaurant-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--card-border);
+}
+
+.restaurant-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+}
+
+/* Restaurant Image Container */
+.restaurant-image {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.restaurant-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.restaurant-card:hover .restaurant-image img {
+  transform: scale(1.05);
+}
+
+/* Restaurant Info Container */
+.restaurant-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+/* Header - Name and Rating */
+.restaurant-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.restaurant-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  word-break: break-word;
+}
+
+/* Rating Badge */
+.restaurant-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--primary-green);
+  color: var(--white);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Cuisine Type */
+.restaurant-cuisine {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Description/Summary */
+.restaurant-summary {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--line-height-normal);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta Information */
+.restaurant-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.restaurant-meta > div {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.restaurant-meta svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primary-green);
+  flex-shrink: 0;
+}
+
+/* Restaurant Grid Container */
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  width: 100%;
+}
+
+/* Empty State */
+.restaurant-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--text-secondary);
+}
+
+.restaurant-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.restaurant-empty-text {
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+/* Skeleton Loading State */
+.restaurant-skeleton {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.skeleton-image {
+  width: 100%;
+  padding-top: 56.25%;
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, rgba(0, 0, 0, 0.05) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-content {
+  padding: var(--spacing-lg);
+  flex: 1;
+}
+
+.skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, rgba(0, 0, 0, 0.05) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+}
+
+.skeleton-line:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Status Badges */
+.restaurant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.restaurant-badge.open {
+  background-color: rgba(29, 184, 84, 0.15);
+  color: var(--primary-green);
+}
+
+.restaurant-badge.closed {
+  background-color: rgba(211, 47, 47, 0.15);
+  color: var(--error);
+}
+
+.restaurant-badge.promoted {
+  background-color: rgba(249, 193, 7, 0.15);
+  color: #F57F17;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .restaurant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .restaurant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .restaurant-name {
+    font-size: var(--font-size-base);
+  }
+
+  .restaurant-info {
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .restaurant-meta {
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .restaurant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .restaurant-card {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .restaurant-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .restaurant-image {
+    padding-top: 56.25%;
+  }
+
+  .restaurant-info {
+    padding: var(--spacing-md);
+  }
+
+  .restaurant-name {
+    font-size: var(--font-size-sm);
+  }
+
+  .restaurant-cuisine {
+    font-size: var(--font-size-xs);
+  }
+
+  .restaurant-summary {
+    font-size: var(--font-size-xs);
+    -webkit-line-clamp: 1;
+  }
+
+  .restaurant-rating {
+    padding: 2px 6px;
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 360px) {
+  .restaurant-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

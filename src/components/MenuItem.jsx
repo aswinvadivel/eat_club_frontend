@@ -1,6 +1,7 @@
 import { Flame, Leaf, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { formatPrice } from '../utils/helpers';
+import '../styles/MenuItem.css';
 
 const MenuItem = ({ item, onAddToCart, restaurantId, isUnavailable = false }) => {
   const [quantity, setQuantity] = useState(1);
@@ -17,7 +18,7 @@ const MenuItem = ({ item, onAddToCart, restaurantId, isUnavailable = false }) =>
   const defaultImage = 'https://via.placeholder.com/200x150?text=' + encodeURIComponent(item.itemName);
 
   return (
-    <div className="menu-item" style={{ opacity: isUnavailable ? 0.6 : 1 }}>
+    <div className={`menu-item ${isUnavailable ? 'unavailable' : ''}`}>
       <div className="menu-item-image">
         <img
           src={item.imageUrl || defaultImage}
@@ -34,66 +35,59 @@ const MenuItem = ({ item, onAddToCart, restaurantId, isUnavailable = false }) =>
 
         <div className="menu-item-meta">
           {item.isVegetarian && (
-            <span className="menu-item-badge" style={{ backgroundColor: '#dcfce7', color: '#16a34a' }}>
-              <Leaf size={14} style={{ display: 'inline', marginRight: '0.25rem' }} />
+            <span className="menu-item-badge vegetarian">
+              <Leaf size={14} />
               Veg
             </span>
           )}
           {item.isSpicy && (
-            <span className="menu-item-badge" style={{ backgroundColor: '#fee', color: '#dc2626' }}>
-              <Flame size={14} style={{ display: 'inline', marginRight: '0.25rem' }} />
+            <span className="menu-item-badge spicy">
+              <Flame size={14} />
               Spicy
             </span>
           )}
-          <span style={{ fontSize: '0.875rem', color: 'var(--medium-gray)' }}>
-            {item.preparationTime} min
-          </span>
+          <span>{item.preparationTime} min</span>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="menu-item-footer">
           <p className="menu-item-price">{formatPrice(item.price)}</p>
 
           {!isUnavailable ? (
-            <div className="menu-item-controls">
+            <div className="quantity-control">
               <button
-                className="btn btn-small"
+                className="quantity-btn"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                style={{ borderRadius: '4px', padding: '0.25rem 0.75rem' }}
               >
-                <Minus size={18} />
+                <Minus size={16} />
               </button>
-              <span style={{ minWidth: '2rem', textAlign: 'center', fontWeight: '600' }}>
-                {quantity}
-              </span>
+              <span className="quantity-display">{quantity}</span>
               <button
-                className="btn btn-small"
+                className="quantity-btn"
                 onClick={() => setQuantity(quantity + 1)}
-                style={{ borderRadius: '4px', padding: '0.25rem 0.75rem' }}
               >
-                <Plus size={18} />
+                <Plus size={16} />
               </button>
               <button
-                className="btn btn-primary btn-small"
+                className="add-to-cart-btn"
                 onClick={handleAddToCart}
-                style={{ borderRadius: '4px' }}
               >
-                Add
+                Add to Cart
               </button>
             </div>
           ) : (
-            <span style={{ color: 'var(--error)', fontWeight: '600', fontSize: '0.875rem' }}>
+            <span className="unavailable-badge">
               Not Available
             </span>
           )}
         </div>
 
         {showSpecialInstructions && !isUnavailable && (
-          <div style={{ marginTop: '0.75rem' }}>
+          <div className="special-instructions">
+            <label>Special Instructions</label>
             <textarea
               placeholder="Add special instructions (e.g., Extra spicy, No onions)"
               value={specialInstructions}
               onChange={(e) => setSpecialInstructions(e.target.value)}
-              style={{ minHeight: '60px' }}
             />
           </div>
         )}

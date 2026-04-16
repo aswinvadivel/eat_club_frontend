@@ -1,103 +1,14 @@
-/* Header Styles */
-.header {
-  background-color: var(--white);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo:hover {
-  color: var(--dark-green);
-}
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.header-nav a {
-  color: var(--dark-gray);
-  text-decoration: none;
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.header-nav a:hover {
-  color: var(--primary-green);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.cart-badge {
-  position: relative;
-}
-
-.cart-badge-count {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: var(--error);
-  color: var(--white);
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--primary-green);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Restaurant Card */
-.restaurant-card {
-  background-color: var(--white);
-  border-radius: var(--border-radius);
-  overflow: hidden;
+/* Components CSS - Deprecated */
+/* All component-specific styles have been moved to individual CSS files:
+   - Header.css
+   - RestaurantCard.css
+   - MenuItem.css
+   - RestaurantFilter.css
+   - Loading.css
+   - Pages.css
+   
+   Please import these files individually in your components.
+*/
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
   cursor: pointer;
@@ -365,32 +276,49 @@
 
 /* Forms */
 .form-container {
-  background-color: var(--white);
-  border-radius: var(--border-radius);
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
   padding: 2rem;
   max-width: 400px;
   margin: 0 auto;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition);
+}
+
+.form-container:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .form-title {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
+  color: var(--text-primary);
+  transition: color var(--transition);
 }
 
 .form-footer {
   text-align: center;
   margin-top: 1.5rem;
+  color: var(--text-secondary);
+  transition: color var(--transition);
 }
 
-.form-footer a {
+.form-footer a,
+.form-footer button {
   color: var(--primary-green);
   text-decoration: none;
   font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.form-footer a:hover {
+.form-footer a:hover,
+.form-footer button:hover {
   text-decoration: underline;
+  color: var(--dark-green);
 }
 
 /* Empty State */

@@ -105,6 +105,7 @@ eat_club_frontend/
 ### UI/UX Features
 - ✅ Responsive design (mobile, tablet, desktop)
 - ✅ Green & black theme throughout
+- ✅ 🌓 **Light/Dark Mode with toggle button** (NEW)
 - ✅ Loading spinners during async operations
 - ✅ Error messages with user guidance
 - ✅ Form validation with inline feedback
@@ -113,6 +114,7 @@ eat_club_frontend/
 - ✅ Status tracking with icons
 - ✅ Empty states with call-to-action
 - ✅ Hamburger menu for mobile
+- ✅ Theme preference persistence
 
 ### Admin Features (Placeholder Structure)
 - ✅ Admin console route
@@ -213,16 +215,45 @@ npm run preview  # Test production build locally
 
 ## 🎨 Design System
 
-### Color Palette
+### 🌓 Theme System (NEW - Light/Dark Mode)
+✅ **Complete theme support with localStorage persistence**
+
+**How it works:**
+- Toggle button in header (top-right corner)
+- Sun/Moon icons indicate current theme
+- Theme preference saved to browser
+- Respects OS dark mode preference on first visit
+- Smooth transitions between themes
+
+**Light Mode:**
+- Primary BG: #FFFFFF | Secondary: #F5F5F5 | Text: #1C1C1C
+- Subtle shadows, clean appearance
+
+**Dark Mode:**
+- Primary BG: #121212 | Secondary: #1E1E1E | Text: #E0E0E0
+- Enhanced shadows, reduced eye strain
+
+**Documentation:** See [DARK_MODE_GUIDE.md](DARK_MODE_GUIDE.md) for complete reference.
+
+### Color Palette (Theme-Aware)
 ```css
-Primary Green:   #22c55e   (Main brand color)
-Dark Green:      #16a34a   (Hover states)
-Light Green:     #dcfce7   (Backgrounds)
-Black:           #000000   (Text/Accents)
-Dark Gray:       #1f2937   (Secondary text)
-Medium Gray:     #6b7280   (Muted text)
-Light Gray:      #f3f4f6   (Backgrounds)
-White:           #ffffff   (Surfaces)
+/* Light Mode Defaults */
+Primary BG:      #FFFFFF  (Main backgrounds)
+Secondary BG:    #F5F5F5  (Sidebar, inputs)
+Primary Text:    #1C1C1C  (Main text)
+Secondary Text:  #757575  (Labels, description)
+Borders:         #E8E8E8  (Cards, inputs)
+
+/* Dark Mode (via [data-theme="dark"]) */
+Primary BG:      #121212  (Main backgrounds)
+Secondary BG:    #1E1E1E  (Sidebar, inputs)
+Primary Text:    #E0E0E0  (Main text)
+Secondary Text:  #B0B0B0  (Labels, descriptions)
+Borders:         #2C2C2C  (Cards, inputs)
+
+/* Brand Colors (Same in both themes) */
+Primary Green:   #1DB854  (Main brand color)
+Dark Green:      #0B6C39  (Hover states)
 ```
 
 ### Typography
