@@ -66,20 +66,6 @@ Authorization: Bearer <token>
 
 ---
 
-### 1.3 User Sign Out
-**Endpoint:** `POST /auth/logout`
-
-**Headers:** Authorization required
-
-**Response (200 OK):**
-```json
-{
-  "message": "Logged out successfully"
-}
-```
-
----
-
 ## 2. User Management Endpoints
 
 ### 2.1 Get User Profile
@@ -221,7 +207,7 @@ Authorization: Bearer <token>
       "isAvailable": true
     }
   ],
-  "createdAt": "2024-04-16T12:00:00Z"
+  "createdAt": 1712200800000
 }
 ```
 
@@ -370,7 +356,7 @@ Authorization: Bearer <token>
 {
   "itemId": "item-001",
   "isAvailable": false,
-  "updatedAt": "2024-04-16T14:00:00Z"
+  "updatedAt": 1712200800000
 }
 ```
 
