@@ -8,6 +8,11 @@ import { menuItemAPI, restaurantAPI } from '../services/api';
 import { MENU_CATEGORIES } from '../utils/constants';
 import { handleApiError } from '../utils/helpers';
 
+const DEFAULT_HERO_IMAGE = 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1600';
+const SECONDARY_HERO_FALLBACK = 'https://picsum.photos/1600/500?food';
+
+const resolveHeroImage = (data) => data?.imageUrl || data?.image_url || DEFAULT_HERO_IMAGE;
+
 const Restaurant = () => {
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState(null);
@@ -16,6 +21,7 @@ const Restaurant = () => {
   const [error, setError] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showVegOnly, setShowVegOnly] = useState(false);
+  const [heroImage, setHeroImage] = useState(DEFAULT_HERO_IMAGE);
 
   const { addToCart, currentRestaurantId } = useCart();
   const navigate = useNavigate();
@@ -32,6 +38,7 @@ const Restaurant = () => {
         ]);
 
         setRestaurant(restaurantRes.data);
+        setHeroImage(resolveHeroImage(restaurantRes.data));
         setMenuItems(menuRes.data.content || []);
       } catch (err) {
         setError(handleApiError(err));
@@ -53,7 +60,7 @@ const Restaurant = () => {
     try {
       addToCart(itemId, restaurantId, quantity, specialInstructions);
       // Show success toast or notification
-      alert(`Added ${quantity} item(s) to cart!`);
+      // alert(`Added ${quantity} item(s) to cart!`);
     } catch (err) {
       alert(handleApiError(err));
     }
@@ -93,20 +100,34 @@ const Restaurant = () => {
     );
   }
 
-  const defaultImage = 'https://via.placeholder.com/1200x300?text=' + encodeURIComponent(restaurant.restaurantName);
-
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--light-gray)' }}>
       {/* Restaurant Header */}
       <div
         style={{
-          backgroundImage: `url(${restaurant.imageUrl || defaultImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
           height: '300px',
           position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        <img
+          src={heroImage}
+          alt={`${restaurant.restaurantName} cover`}
+          onError={(e) => {
+            if (e.currentTarget.src.includes('picsum.photos')) {
+              return;
+            }
+            setHeroImage(SECONDARY_HERO_FALLBACK);
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
         <div
           style={{
             position: 'absolute',
@@ -167,7 +188,7 @@ const Restaurant = () => {
           <p style={{ color: 'var(--medium-gray)' }}>{restaurant.description}</p>
         </div>
 
-        {currentRestaurantId && currentRestaurantId !== parseInt(restaurantId) && (
+        {currentRestaurantId && String(currentRestaurantId) !== String(restaurantId) && (
           <div className="alert alert-warning" style={{ marginBottom: '1.5rem' }}>
             You have items from another restaurant in your cart. You can only order from one restaurant at a time.
           </div>
@@ -198,7 +219,7 @@ const Restaurant = () => {
               >
                 All
               </button>
-              {MENU_CATEGORIES.map((category) => (
+              {MENU_CATEGORIES.filter((category) => category !== 'All').map((category) => (
                 <button
                   key={category}
                   className={`btn ${selectedCategory === category ? 'btn-primary' : 'btn-outline'}`}
@@ -219,7 +240,7 @@ const Restaurant = () => {
               <MenuItem
                 key={item.itemId}
                 item={item}
-                restaurantId={parseInt(restaurantId)}
+                restaurantId={restaurantId}
                 onAddToCart={handleAddToCart}
                 isUnavailable={item.isAvailable === false}
               />

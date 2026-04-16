@@ -101,6 +101,7 @@ const MenuItem = ({ item, onAddToCart, restaurantId, isUnavailable = false }) =>
               fontSize: '0.875rem',
               padding: 0,
               fontWeight: '500',
+              border: 'none',
             }}
             onClick={() => setShowSpecialInstructions(!showSpecialInstructions)}
           >

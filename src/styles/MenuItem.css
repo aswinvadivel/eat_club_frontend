@@ -210,7 +210,7 @@
 /* Special Instructions */
 .special-instructions {
   background-color: var(--bg-secondary);
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-lg);
   margin-top: var(--spacing-md);
@@ -227,12 +227,20 @@
 
 .special-instructions textarea {
   padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--input-border);
   border-radius: var(--border-radius-md);
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   resize: vertical;
   min-height: 80px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.special-instructions textarea:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-green) 25%, transparent);
 }
 
 /* Menu Items List Container */

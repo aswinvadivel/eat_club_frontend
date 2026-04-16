@@ -1,18 +1,21 @@
 import { Clock, MapPin, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { truncateText } from '../utils/helpers';
+import { getRestaurantId, truncateText } from '../utils/helpers';
 import '../styles/RestaurantCard.css';
 
 const RestaurantCard = ({ restaurant }) => {
-  const defaultImage = 'https://via.placeholder.com/400x200?text=' + encodeURIComponent(restaurant.restaurantName);
+  const restaurantId = getRestaurantId(restaurant);
+  const restaurantName = restaurant?.restaurantName || restaurant?.name || 'Restaurant';
+  const defaultImage = 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1200';
+  const targetPath = restaurantId ? `/restaurant/${restaurantId}` : '/';
   
   return (
-    <Link to={`/restaurant/${restaurant.restaurantId}`} className="restaurant-link">
+    <Link to={targetPath} className="restaurant-link" aria-disabled={!restaurantId}>
       <div className="restaurant-card">
         <div className="restaurant-image">
           <img 
             src={restaurant.imageUrl || defaultImage} 
-            alt={restaurant.restaurantName}
+            alt={restaurantName}
             onError={(e) => {
               e.target.src = defaultImage;
             }}
@@ -21,7 +24,7 @@ const RestaurantCard = ({ restaurant }) => {
         
         <div className="restaurant-info">
           <div className="restaurant-header">
-            <h3 className="restaurant-name">{restaurant.restaurantName}</h3>
+            <h3 className="restaurant-name">{restaurantName}</h3>
             {restaurant.averageRating && (
               <div className="restaurant-rating">
                 <Star size={16} fill="white" />

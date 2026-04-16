@@ -51,7 +51,7 @@ const RestaurantFilter = ({ onFilterChange, onSearchChange, onSortChange }) => {
       {/* Sort */}
       <div className="form-group">
         <label>Sort By</label>
-        <select value={sortBy} onChange={handleSortChange}>
+        <select className="filter-sort-select" value={sortBy} onChange={handleSortChange}>
           {SORT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

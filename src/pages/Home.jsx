@@ -3,7 +3,7 @@ import Loading from '../components/Loading';
 import RestaurantCard from '../components/RestaurantCard';
 import RestaurantFilter from '../components/RestaurantFilter';
 import { restaurantAPI } from '../services/api';
-import { filterRestaurants, handleApiError, searchRestaurants, sortRestaurants } from '../utils/helpers';
+import { filterRestaurants, handleApiError, normalizeRestaurant, searchRestaurants, sortRestaurants } from '../utils/helpers';
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -20,7 +20,10 @@ const Home = () => {
         setLoading(true);
         setError('');
         const response = await restaurantAPI.getAll({ page: 0, size: 50 });
-        setRestaurants(response.data.content || []);
+        const rawRestaurants = Array.isArray(response.data)
+          ? response.data
+          : (response.data?.content || []);
+        setRestaurants(rawRestaurants.map(normalizeRestaurant));
       } catch (err) {
         setError(handleApiError(err));
       } finally {
@@ -99,7 +102,7 @@ const Home = () => {
             </p>
             <div className="grid grid-2 home-grid">
               {filteredRestaurants.map((restaurant) => (
-                <RestaurantCard key={restaurant.restaurantId} restaurant={restaurant} />
+                <RestaurantCard key={restaurant.restaurantId || restaurant.restaurantName} restaurant={restaurant} />
               ))}
             </div>
           </>

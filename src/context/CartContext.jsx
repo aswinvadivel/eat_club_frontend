@@ -111,6 +111,7 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cart,
+    cartItems: cart?.cartItems || [],
     loading,
     error,
     addToCart,
@@ -118,7 +119,7 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     clearCart,
     refreshCart,
-    cartItemsCount: cart?.cartItems?.length || 0,
+    cartItemsCount: (cart?.cartItems || []).reduce((sum, item) => sum + (item.quantity || 0), 0),
     cartTotal: cart?.total || 0,
     currentRestaurantId: cart?.restaurantId || null,
   };

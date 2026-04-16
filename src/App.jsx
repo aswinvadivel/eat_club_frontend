@@ -1,4 +1,5 @@
 import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import FloatingCartBar from './components/FloatingCartBar';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
@@ -36,7 +37,7 @@ const App = () => {
 
               {/* Protected User Routes */}
               {/* <Route element={<ProtectedRoute requiredRole="USER" />}> */}
-                <Route element={<><Header /><Outlet /></>}>
+                <Route element={<><Header /><Outlet /><FloatingCartBar /></>}>
                   <Route path="/" element={<Home />} />
                   <Route path="/restaurant/:restaurantId" element={<Restaurant />} />
                   <Route path="/cart" element={<Cart />} />

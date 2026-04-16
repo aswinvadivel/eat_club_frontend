@@ -71,6 +71,32 @@
   gap: 0.5rem;
 }
 
+.cart-payment-select {
+  width: 100%;
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 0.7rem 2.2rem 0.7rem 0.85rem;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-tertiary) 50%),
+    linear-gradient(135deg, var(--text-tertiary) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) calc(50% - 2px),
+    calc(100% - 10px) calc(50% - 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.cart-payment-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-green) 22%, transparent);
+}
+
 .orders-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

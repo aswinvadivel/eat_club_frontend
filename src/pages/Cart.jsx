@@ -25,6 +25,21 @@ const Cart = () => {
 
   const navigate = useNavigate();
 
+  const getUnitPrice = (item) => {
+    const unit = Number(item?.unitPrice ?? item?.price ?? 0);
+    return Number.isFinite(unit) ? unit : 0;
+  };
+
+  const getLineTotal = (item) => {
+    const totalPrice = Number(item?.totalPrice);
+    if (Number.isFinite(totalPrice) && totalPrice > 0) {
+      return totalPrice;
+    }
+
+    const quantity = Number(item?.quantity ?? 0);
+    return getUnitPrice(item) * (Number.isFinite(quantity) ? quantity : 0);
+  };
+
   useEffect(() => {
     if (!cart?.restaurantId) {
       setLoading(false);
@@ -45,7 +60,7 @@ const Cart = () => {
     fetchRestaurant();
   }, [cart?.restaurantId]);
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + getLineTotal(item), 0);
   const tax = subtotal * 0.05; // 5% tax
   const deliveryCharge = 40;
   const totalBeforeDiscount = subtotal + tax + deliveryCharge + tipAmount;
@@ -213,7 +228,7 @@ const Cart = () => {
                     {item.specialInstructions && `Special: ${item.specialInstructions}`}
                   </p>
                   <p style={{ margin: '0.5rem 0 0 0', fontWeight: '600' }}>
-                    {formatPrice(item.price)}
+                    {formatPrice(getUnitPrice(item))}
                   </p>
                 </div>
 
@@ -395,6 +410,7 @@ const Cart = () => {
                   <div className="form-group">
                     <label>Payment Method *</label>
                     <select
+                      className="cart-payment-select"
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       required

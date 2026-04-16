@@ -74,9 +74,9 @@ export const searchRestaurants = (restaurants, query) => {
   if (!q) return restaurants;
   
   return restaurants.filter((r) =>
-    r.restaurantName.toLowerCase().includes(q) ||
-    r.description.toLowerCase().includes(q) ||
-    r.cuisineType.toLowerCase().includes(q)
+    (r.restaurantName || '').toLowerCase().includes(q) ||
+    (r.description || '').toLowerCase().includes(q) ||
+    (r.cuisineType || '').toLowerCase().includes(q)
   );
 };
 
@@ -148,4 +148,28 @@ export const handleApiError = (error) => {
 export const normalizeRole = (role) => {
   if (!role) return '';
   return String(role).replace(/^ROLE_/i, '').toUpperCase();
+};
+
+export const getRestaurantId = (restaurant) => {
+  if (!restaurant || typeof restaurant !== 'object') return '';
+
+  const directId = restaurant.restaurantId || restaurant.id || restaurant.restaurantID || restaurant.restaurant_id;
+  if (directId) return String(directId);
+
+  const matchedKey = Object.keys(restaurant).find((key) =>
+    key.toLowerCase().replace(/[_-]/g, '') === 'restaurantid'
+  );
+
+  return matchedKey ? String(restaurant[matchedKey]) : '';
+};
+
+export const normalizeRestaurant = (restaurant) => {
+  const restaurantId = getRestaurantId(restaurant);
+  return {
+    ...restaurant,
+    restaurantId,
+    restaurantName: restaurant?.restaurantName || restaurant?.name || 'Restaurant',
+    description: restaurant?.description || '',
+    cuisineType: restaurant?.cuisineType || restaurant?.cuisine || 'Multi Cuisine',
+  };
 };

@@ -11,6 +11,8 @@ const getStatusIcon = (status) => {
       return <Clock size={20} style={{ color: 'var(--warning)' }} />;
     case 'CONFIRMED':
     case 'PREPARED':
+    case 'PREPARING':
+    case 'OUT_FOR_DELIVERY':
     case 'DELIVERED':
       return <CheckCircle size={20} style={{ color: 'var(--primary-green)' }} />;
     case 'CANCELLED':
@@ -26,6 +28,8 @@ const getStatusBadgeColor = (status) => {
       return { bg: '#fef3c7', color: '#92400e' };
     case 'CONFIRMED':
     case 'PREPARED':
+    case 'PREPARING':
+    case 'OUT_FOR_DELIVERY':
       return { bg: '#dcfce7', color: '#166534' };
     case 'DELIVERED':
       return { bg: '#d1fae5', color: '#065f46' };
@@ -34,6 +38,24 @@ const getStatusBadgeColor = (status) => {
     default:
       return { bg: '#f3f4f6', color: '#374151' };
   }
+};
+
+const normalizeStatus = (status) => {
+  if (!status) return 'UNKNOWN';
+  return String(status).toUpperCase();
+};
+
+const normalizeOrder = (order) => {
+  const status = normalizeStatus(order?.orderStatus || order?.status);
+  const normalizedItems = order?.orderItems || [];
+  return {
+    ...order,
+    status,
+    totalAmount: Number(order?.totalAmount ?? order?.total ?? 0),
+    orderDate: order?.orderDate ?? order?.createdAt ?? null,
+    orderItems: normalizedItems,
+    itemCount: Number(order?.itemCount ?? normalizedItems.length ?? 0),
+  };
 };
 
 const Orders = () => {
@@ -48,7 +70,10 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await orderAPI.getHistory({ page: 0, size: 50 });
-        setOrders(response.data.content || []);
+        const rawOrders = Array.isArray(response.data)
+          ? response.data
+          : (response.data?.content || []);
+        setOrders(rawOrders.map(normalizeOrder));
       } catch (err) {
         setError(handleApiError(err));
       } finally {
@@ -64,28 +89,28 @@ const Orders = () => {
   }
 
   const filteredOrders = orders
-    .filter((order) => statusFilter === 'ALL' || order.status === statusFilter)
+    .filter((order) => statusFilter === 'ALL' || normalizeStatus(order.status) === statusFilter)
     .filter((order) => {
       if (!searchQuery.trim()) return true;
       const query = searchQuery.trim().toLowerCase();
       const itemMatch = (order.orderItems || []).some((item) =>
         item.itemName?.toLowerCase().includes(query)
       );
-      return String(order.orderId).includes(query) || itemMatch;
+      return String(order.orderId || '').toLowerCase().includes(query) || itemMatch;
     });
 
   const orderStats = {
     totalOrders: orders.length,
     totalSpend: orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0),
-    delivered: orders.filter((order) => order.status === 'DELIVERED').length,
-    active: orders.filter((order) => ['PENDING', 'CONFIRMED', 'PREPARED'].includes(order.status)).length,
+    delivered: orders.filter((order) => normalizeStatus(order.status) === 'DELIVERED').length,
+    active: orders.filter((order) => ['PENDING', 'CONFIRMED', 'PREPARED', 'PREPARING', 'OUT_FOR_DELIVERY'].includes(normalizeStatus(order.status))).length,
   };
 
   const toggleOrderExpand = (orderId) => {
     setExpandedOrders((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
   };
 
-  const statusTabs = ['ALL', 'PENDING', 'CONFIRMED', 'PREPARED', 'DELIVERED', 'CANCELLED'];
+  const statusTabs = ['ALL', 'PENDING', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'];
 
   return (
     <div className="page-shell">
@@ -143,7 +168,7 @@ const Orders = () => {
         {filteredOrders.length > 0 ? (
           <div className="grid grid-1">
             {filteredOrders.map((order) => {
-              const statusBadgeColor = getStatusBadgeColor(order.status);
+              const statusBadgeColor = getStatusBadgeColor(normalizeStatus(order.status));
               const isExpanded = !!expandedOrders[order.orderId];
               return (
                 <div
@@ -177,12 +202,12 @@ const Orders = () => {
                           }}
                         >
                           {getStatusIcon(order.status)}
-                          {order.status}
+                          {normalizeStatus(order.status)}
                         </span>
                       </div>
 
                       <p style={{ margin: '0.5rem 0 0 0', color: 'var(--medium-gray)', fontSize: '0.875rem' }}>
-                        Placed on {formatDateTime(new Date(order.orderDate))}
+                        Placed on {formatDateTime(order.orderDate)}
                       </p>
                     </div>
 
@@ -191,7 +216,7 @@ const Orders = () => {
                         {formatPrice(order.totalAmount)}
                       </h3>
                       <p style={{ margin: '0.25rem 0 0 0', color: 'var(--medium-gray)', fontSize: '0.875rem' }}>
-                        {order.orderItems?.length || 0} items
+                        {order.itemCount || 0} items
                       </p>
                       <button
                         className="btn btn-outline"

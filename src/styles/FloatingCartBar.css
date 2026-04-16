@@ -1,0 +1,147 @@
+.floating-cart-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0.85rem;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  animation: cartBarSlideUp 220ms ease-out;
+}
+
+.floating-cart-bar-content {
+  pointer-events: auto;
+  width: min(920px, calc(100% - 1.4rem));
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--primary-green) 35%, var(--card-border));
+  background: linear-gradient(120deg, color-mix(in srgb, var(--primary-green) 20%, var(--card-bg)), var(--card-bg));
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.24);
+  padding: 0.8rem 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.floating-cart-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.floating-cart-bag-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: var(--primary-green);
+}
+
+.floating-cart-count {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.floating-cart-total {
+  margin: 0.15rem 0 0;
+  color: var(--primary-green);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.floating-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.58rem 0.85rem;
+  border-radius: 10px;
+  color: #ffffff;
+  background: var(--primary-green);
+  font-weight: 700;
+  font-size: 0.83rem;
+  border: 1px solid color-mix(in srgb, var(--primary-green) 75%, #ffffff);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.floating-cart-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.floating-cart-clear-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--error) 35%, var(--card-border));
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.floating-cart-clear-btn:hover {
+  transform: translateY(-1px);
+  color: #ffffff;
+  background: var(--error);
+}
+
+.floating-cart-btn:hover {
+  background: var(--dark-green);
+  transform: translateY(-1px);
+}
+
+@keyframes cartBarSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .floating-cart-bar {
+    bottom: 0.65rem;
+  }
+
+  .floating-cart-bar-content {
+    width: calc(100% - 1rem);
+    padding: 0.7rem 0.75rem;
+  }
+
+  .floating-cart-bag-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .floating-cart-count {
+    font-size: 0.72rem;
+  }
+
+  .floating-cart-total {
+    font-size: 0.86rem;
+  }
+
+  .floating-cart-btn {
+    padding: 0.52rem 0.7rem;
+    font-size: 0.76rem;
+  }
+
+  .floating-cart-clear-btn {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+}
